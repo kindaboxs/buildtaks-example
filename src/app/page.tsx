@@ -1,16 +1,25 @@
-import { Suspense } from "react";
+"use client";
 
-import { Client } from "@/app/client";
-import { api, HydrateClient } from "@/trpc/server";
+import { toast } from "sonner";
 
-export default async function HomePage() {
-	void api.post.hello.prefetch({ text: "titid" });
+import { Button } from "@/components/ui/button";
+import { api } from "@/trpc/react";
+
+export default function HomePage() {
+	const invoke = api.post.invoke.useMutation({
+		onSuccess: () => {
+			toast.success("Background Job Started");
+		},
+	});
 
 	return (
-		<HydrateClient>
-			<Suspense fallback={<p>Loading...</p>}>
-				<Client />
-			</Suspense>
-		</HydrateClient>
+		<div className="mx-auto max-w-7xl p-4">
+			<Button
+				onClick={() => invoke.mutate({ text: "Hello World" })}
+				disabled={invoke.isPending}
+			>
+				Invoke Background Job
+			</Button>
+		</div>
 	);
 }
