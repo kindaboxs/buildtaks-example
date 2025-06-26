@@ -44,3 +44,4 @@ next-env.d.ts
 .qodo
 pnpm-workspace.yaml
 pnpm-lock.yaml
+/src/generated/prisma
